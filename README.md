@@ -1,7 +1,7 @@
 # Olist-ecommerce-insights
 Analysis of Olist E-Commerce using PostgreSQL and Python to optimize marketing, payment strategy, and delivery performance
 
-## Data Ingestion
+## 1. Data Ingestion
 
 This step moves the raw data from local CSV files into a PostgreSQL database using Python. It sets up a proper relational structure so we can run SQL queries smoothly.
 
