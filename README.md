@@ -23,3 +23,5 @@ The complete setup logic is handled by the Python script included in this reposi
 
 ![Q2-3_1](./Q2-3_1.png)
 
+* **Key Insight:** Shipping cost varies a lot across Brazil. **SP (São Paulo)** has the lowest shipping burden at only **13.85%**. On the other hand, remote states like **RR** and **MA** are the most expensive, with shipping taking up over **26% to 28%** of the product price.
+* **Business Action:** SP is the safest and cheapest area to run marketing ads and big discount promotions because shipping won't eat into our profits.
