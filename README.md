@@ -15,6 +15,8 @@ The complete setup logic is handled by the Python script included in this reposi
 
 ## Q2: Target Market & Shipping Profitability (Before Buying)
 
+**Full SQL:** [Nike_Sales_Cleaned_v2.sql](./Nike_Sales_Cleaned_v2.sql)
+
 * **Step 2.1: Checking Raw Data** – Looked at the `customers` and `order_items` tables to see how the state locations, product prices, and shipping fees look.
 * **Step 2.2: Cleaning the Tables** – Created a safe SQL View called `v_clean_orders_q2`. This removes canceled orders and fixes date formats so the calculations stay accurate.
 * **Step 2.3: Final Query** – Joined the cleaned tables together. Grouped everything by state to calculate the total product sales, shipping costs, and the final `shipping_to_revenue_pct` numbers.
