@@ -59,3 +59,4 @@ The complete setup logic is handled by the Python script included in this reposi
 * **Key Insight:** The scatter plot charts a clear positive connection between order transaction size and installment months. High-ticket tech assets gather in the top-right zone, signaling strict dependency on monthly financing to clear inventory. Low-value impulse categories stay clustered in the bottom-left.
 * **Business Action:** For categories pinned in the top-right sector, extended financing terms are a non-negotiable sales driver. For clusters on the lower-left with small pricing weights, operations should incentivize cross-category bundling at checkout to bump up total cart values before unlocking monthly installment perks.
 
+
