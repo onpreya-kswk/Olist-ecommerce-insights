@@ -54,4 +54,8 @@ The complete setup logic is handled by the Python script included in this reposi
 * **Key Insight:** Sorting by financing duration clearly proves that tech and heavy machinery dominate long-term credit. **Computers** lead the charts at nearly 7 installment months, followed closely by appliances and furniture. However, daily volume is driven by fast-moving items in the middle—like **bed_bath_table** and **health_beauty**—which have massive order counts (tall orange bars) but stay on shorter 4-month repayment cycles.
 * **Business Action:** Financial promo budgets should focus on safeguarding 0% interest programs exclusively for high-ticket electronics (the left side of the chart) to protect cart conversions. For high-volume daily items, marketing should shift budgets toward instant cashbacks to nudge customers away from credit cards and toward low-fee payment alternatives like Pix.
 
+![Q3-3_3](./Q3-3_3.png)
+
+* **Key Insight:** The scatter plot charts a clear positive connection between order transaction size and installment months. High-ticket tech assets gather in the top-right zone, signaling strict dependency on monthly financing to clear inventory. Low-value impulse categories stay clustered in the bottom-left.
+* **Business Action:** For categories pinned in the top-right sector, extended financing terms are a non-negotiable sales driver. For clusters on the lower-left with small pricing weights, operations should incentivize cross-category bundling at checkout to bump up total cart values before unlocking monthly installment perks.
 
