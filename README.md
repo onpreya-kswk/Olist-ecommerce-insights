@@ -44,7 +44,14 @@ The complete setup logic is handled by the Python script included in this reposi
 * **Step 3.2: Cleaning the Tables** – Updated the Python setup script to match the raw schema types. Created a clean database connection that sets up English headers and handles missing category nulls as 'unknown' to avoid blank charts.
 * **Step 3.3: Final Query** – Joined the payments and cleaned product assets together in DBeaver. Filtered exclusively for `credit_card` logs to calculate `total_credit_card_orders` and the final `avg_payment_installments` numbers.
 
+![Q3-3_1](./Q3-3_1.png)
 
+* **Key Insight:** Customers heavily rely on payment flexibility for high-value items. **Computers** lead the entire platform with the longest installment plan, averaging **nearly 7 months**. Other expensive categories like **small_appliances** and **office_furniture** also show a high installment burden, averaging around **5 to 6 months**.
+* **Business Action:** The business must protect and prioritize long-term "0% interest" partnership deals with banks for the tech and furniture sectors. Removing these long installment plans will directly kill our sales volumes for high-ticket items.
 
+![Q3-3_2](./Q3-3_2.png)
+
+* **Key Insight:** Sorting by financing duration clearly proves that tech and heavy machinery dominate long-term credit. **Computers** lead the charts at nearly 7 installment months, followed closely by appliances and furniture. However, daily volume is driven by fast-moving items in the middle—like **bed_bath_table** and **health_beauty**—which have massive order counts (tall orange bars) but stay on shorter 4-month repayment cycles.
+* **Business Action:** Financial promo budgets should focus on safeguarding 0% interest programs exclusively for high-ticket electronics (the left side of the chart) to protect cart conversions. For high-volume daily items, marketing should shift budgets toward instant cashbacks to nudge customers away from credit cards and toward low-fee payment alternatives like Pix.
 
 
