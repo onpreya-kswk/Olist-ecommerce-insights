@@ -36,6 +36,14 @@ The complete setup logic is handled by the Python script included in this reposi
 * **Key Insight:** There is a clear, tight link between total orders and total revenue. The dots follow a steady upward line, meaning our sales growth depends heavily on order volume rather than just a few expensive items. The darker red dots (high shipping burden) mostly sit at the lower end of the order volume.
 * **Business Action:** To push the business forward, we need to focus on getting more order numbers in low-shipping regions (light-colored dots) while slowly building up warehouse hubs near the high-shipping regions to lower their costs.
 
+## Q3: Category Installment Behaviors (During Checkout)
+
+**SQL:** [Q3.sql](./Q3.sql)
+
+* **Step 3.1: Checking Raw Data** – Looked at the `payments` and `products` tables to see how payment installment months are recorded and checked the native Portuguese category names.
+* **Step 3.2: Cleaning the Tables** – Updated the Python setup script to match the raw schema types. Created a clean database connection that sets up English headers and handles missing category nulls as 'unknown' to avoid blank charts.
+* **Step 3.3: Final Query** – Joined the payments and cleaned product assets together in DBeaver. Filtered exclusively for `credit_card` logs to calculate `total_credit_card_orders` and the final `avg_payment_installments` numbers.
+
 
 
 
