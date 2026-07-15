@@ -1,62 +1,67 @@
-# Olist-ecommerce-insights
-Analysis of Olist E-Commerce using PostgreSQL and Python to optimize marketing, payment strategy, and delivery performance
+# Olist E-Commerce Insights
 
-## Data Ingestion
+Digging into Olist's Brazilian e-commerce data to find where marketing spend is safest, how customers pay for expensive items, and what that means for the business.
 
-This step moves the raw data from local CSV files into a PostgreSQL database using Python. It sets up a proper relational structure so we can run SQL queries smoothly.
+**Tools:** Python (loading the data), PostgreSQL (all the analysis), Tableau (charts). Python is only used once, at the very start, to move the raw CSV files into the database — every insight after that comes from SQL queries.
 
-The complete setup logic is handled by the Python script included in this repository.
+## Step 1: Getting the Data In
 
-### Key Details
-* **Source to Destination:** Loads raw local CSV files directly into a local PostgreSQL database.
-* **Text Fixing:** Uses `encoding='latin1'` to stop the script from crashing on Portuguese special characters.
-* **Auto Dates:** Uses `parse_dates=True` so Pandas fixes all date text formats into proper timestamps automatically.
-* **RAM Saving:** Pushes data in chunks of 10,000 rows to keep memory usage low and prevent system freezes.
+Before any analysis can happen, the raw CSV files need to live in a proper database instead of eight separate spreadsheets. This step handles that using a Python script.
 
-## Q2: Target Market & Shipping Profitability (Before Buying)
+Script: [`data_ingestion.py`](./data_ingestion.py)
+
+What it does:
+* Reads all 8 CSV files and loads each one into its own PostgreSQL table.
+* Uses `encoding='latin1'` — without this, the script crashes on the Portuguese accented characters in the product category names.
+* Loads data in batches of 10,000 rows instead of all at once, so it doesn't eat up all the RAM on a normal laptop.
+* If one file fails to load, the script skips it and keeps going instead of stopping the whole process.
+
+Once this runs, the database is ready and everything else is done in SQL.
+
+## Q2: Where Should Marketing Spend Go? (Before the Sale)
 
 **SQL:** [Q2.sql](./Q2.sql)
 
-* **Step 2.1: Checking Raw Data** – Looked at the `customers` and `order_items` tables to see how the state locations, product prices, and shipping fees look.
-* **Step 2.2: Cleaning the Tables** – Created a safe SQL View called `v_clean_orders_q2`. This removes canceled orders and fixes date formats so the calculations stay accurate.
-* **Step 2.3: Final Query** – Joined the cleaned tables together. Grouped everything by state to calculate the total product sales, shipping costs, and the final `shipping_to_revenue_pct` numbers.
+* **2.1 — Looked at the raw tables first.** Checked how state codes are stored in `customers` and how prices/shipping fees look in `order_items`, before writing anything else.
+* **2.2 — Cleaned it up.** Built a view called `v_clean_orders_q2` that only keeps orders marked as delivered, and fixes the date columns so later math doesn't break.
+* **2.3 — Ran the numbers.** Joined the tables, grouped by state, and worked out total sales, total shipping cost, and shipping cost as a percentage of revenue for each state.
 
 ![Q2-3_1](./Q2-3_1.png)
 
-* **Key Insight:** Shipping cost varies a lot across Brazil. **SP (São Paulo)** has the lowest shipping burden at only **13.85%**. On the other hand, remote states like **RR** and **MA** are the most expensive, with shipping taking up over **26% to 28%** of the product price.
-* **Business Action:** SP is the safest and cheapest area to run marketing ads and big discount promotions because shipping won't eat into our profits.
+* **What I found:** Shipping cost eats a very different chunk of revenue depending on the state. **São Paulo (SP)** is the cheapest to ship to — only **13.85%** of the sale price. Remote states like **RR** and **MA** are the opposite, with shipping running **26–28%** of the sale price.
+* **What this means:** SP is the safest place to spend marketing money and run discounts, since shipping won't quietly eat the margin.
 
 ![Q2-3_2](./Q2-3_2.png)
 
-* **Key Insight:** The chart shows that our highest-selling states are actually the ones with the lowest shipping costs. The big revenue peak on the left belongs to SP, which combines high sales volumes with very low delivery overhead.
-* **Business Action:** We shouldn't treat every high-revenue state the same way. If a state has decent sales but the shipping line sits high up, we need to bundle products together to increase the average order size and offset the delivery fee.
+* **What I found:** The states with the most sales are also the ones with the lowest shipping cost. SP shows up again here — high volume and low delivery overhead at the same time.
+* **What this means:** Not every high-revenue state should get the same treatment. If a state sells well but shipping cost is high, the fix is probably to get people to order more per basket (bundles, free-shipping thresholds) rather than just running more ads there.
 
 ![Q2-3_3](./Q2-3_3.png)
 
-* **Key Insight:** There is a clear, tight link between total orders and total revenue. The dots follow a steady upward line, meaning our sales growth depends heavily on order volume rather than just a few expensive items. The darker red dots (high shipping burden) mostly sit at the lower end of the order volume.
-* **Business Action:** To push the business forward, we need to focus on getting more order numbers in low-shipping regions (light-colored dots) while slowly building up warehouse hubs near the high-shipping regions to lower their costs.
+* **What I found:** Order count and revenue move together in a pretty straight line — growth here is mostly about getting more orders, not a few big-ticket sales. The states with high shipping cost (darker dots) tend to also have fewer orders.
+* **What this means:** Two different plays: push order volume in the cheap-shipping states, and look at setting up local warehouses or fulfillment partners near the expensive-shipping ones over time.
 
-## Q3: Category Installment Behaviors (During Checkout)
+## Q3: How Do People Pay for Things? (At Checkout)
 
 **SQL:** [Q3.sql](./Q3.sql)
 
-* **Step 3.1: Checking Raw Data** – Looked at the `payments` and `products` tables to see how payment installment months are recorded and checked the native Portuguese category names.
-* **Step 3.2: Cleaning the Tables** – Updated the Python setup script to match the raw schema types. Created a clean database connection that sets up English headers and handles missing category nulls as 'unknown' to avoid blank charts.
-* **Step 3.3: Final Query** – Joined the payments and cleaned product assets together in DBeaver. Filtered exclusively for `credit_card` logs to calculate `total_credit_card_orders` and the final `avg_payment_installments` numbers.
+* **3.1 — Looked at the raw tables first.** Checked how `payment_installments` is recorded in `payments`, and noticed product categories in `products` are still in Portuguese.
+* **3.2 — Cleaned it up.** Built a view (`v_clean_products_q3`) that joins in the English category names, and labels anything missing as `'unknown'` so it doesn't break the charts.
+* **3.3 — Ran the numbers.** Joined payments to products, filtered to credit card payments only, and calculated the average number of installments per category.
 
 ![Q3-3_1](./Q3-3_1.png)
 
-* **Key Insight:** Customers heavily rely on payment flexibility for high-value items. **Computers** lead the entire platform with the longest installment plan, averaging **nearly 7 months**. Other expensive categories like **small_appliances** and **office_furniture** also show a high installment burden, averaging around **5 to 6 months**.
-* **Business Action:** The business must protect and prioritize long-term "0% interest" partnership deals with banks for the tech and furniture sectors. Removing these long installment plans will directly kill our sales volumes for high-ticket items.
+* **What I found:** Expensive categories get stretched out the most. **Computers** average almost **7 months** of installments — the longest on the platform. **Small appliances** and **office furniture** aren't far behind, at around **5–6 months**.
+* **What this means:** Keeping 0%-interest financing deals with banks for electronics and furniture matters a lot here — these categories look like they depend on installments to sell at all. I'd want to test this before cutting installment options, since right now it's a pattern in the data, not a proven cause-and-effect.
 
 ![Q3-3_2](./Q3-3_2.png)
 
-* **Key Insight:** Sorting by financing duration clearly proves that tech and heavy machinery dominate long-term credit. **Computers** lead the charts at nearly 7 installment months, followed closely by appliances and furniture. However, daily volume is driven by fast-moving items in the middle—like **bed_bath_table** and **health_beauty**—which have massive order counts (tall orange bars) but stay on shorter 4-month repayment cycles.
-* **Business Action:** Financial promo budgets should focus on safeguarding 0% interest programs exclusively for high-ticket electronics (the left side of the chart) to protect cart conversions. For high-volume daily items, marketing should shift budgets toward instant cashbacks to nudge customers away from credit cards and toward low-fee payment alternatives like Pix.
+* **What I found:** Sorting by installment length confirms it — computers and appliances sit at the top. But the categories with the *most orders* are different: things like **bed_bath_table** and **health_beauty** sell in huge volume but only stretch to about 4 months of installments.
+* **What this means:** Two different budgets, two different goals. Protect the 0%-interest deals for the expensive electronics (that's what keeps those sales alive). For the high-volume everyday items, it's probably cheaper to offer instant cashback and nudge people toward Pix instead of credit cards, since those items don't need long financing to sell.
 
 ![Q3-3_3](./Q3-3_3.png)
 
-* **Key Insight:** The scatter plot charts a clear positive connection between order transaction size and installment months. High-ticket tech assets gather in the top-right zone, signaling strict dependency on monthly financing to clear inventory. Low-value impulse categories stay clustered in the bottom-left.
-* **Business Action:** For categories pinned in the top-right sector, extended financing terms are a non-negotiable sales driver. For clusters on the lower-left with small pricing weights, operations should incentivize cross-category bundling at checkout to bump up total cart values before unlocking monthly installment perks.
+* **What I found:** The scatter plot shows a clear pattern — the more expensive the average order, the longer the installment plan tends to be. Expensive tech sits in the top right, cheap impulse-buy categories cluster in the bottom left.
+* **What this means:** For the top-right categories, long financing terms look like a real requirement to close the sale, not just a nice-to-have. For the bottom-left categories, it's more about getting people to add a second or third item to the cart, since installments don't seem to be the deciding factor there.
 
 
