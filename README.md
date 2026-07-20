@@ -60,4 +60,4 @@ Marketing should lean into SP, DF, and RJ first, since they keep more margin per
 - All three states buy from SP-based sellers at a similar rate (71–78% of orders) — it's not about relying on out-of-state sellers more.
 - What's left is plain distance: PE and CE sit roughly 2,000+ km from SP, where most sellers are based.
 
-*Shows only states with 1,000+ orders (14 of 27). The rest were excluded — too few orders to draw a reliable pattern from.*
+*Shows only states with 1,000+ orders. The rest were excluded — too few orders to draw a reliable pattern from.*
