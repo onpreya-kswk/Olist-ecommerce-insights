@@ -18,11 +18,9 @@ What it does:
 
 Once this runs, the database is ready and everything else is done in SQL.
 
-## Q2: Where Should Marketing Spend Go? (Before the Sale)
+## Q2: Where does shipping cost hurt margins the most?
 
 **SQL:** [Q2.sql](./Q2.sql)
-
-## Q2: Where does shipping cost hurt margins the most?
 
 ### Cleaning the data (Step 1–2 in Q2.sql)
 
