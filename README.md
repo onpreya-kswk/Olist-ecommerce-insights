@@ -61,3 +61,33 @@ Marketing should lean into SP, DF, and RJ first, since they keep more margin per
 - What's left is plain distance: PE and CE sit roughly 2,000+ km from SP, where most sellers are based.
 
 *Shows only states with 1,000+ orders. The rest were excluded — too few orders to draw a reliable pattern from.*
+
+### Chart 2: Revenue vs shipping cost burden by state
+
+![Q2-2](./Q2-2.png)
+
+Revenue bars drop off fast, from SP (~5M) down to CE (under 250K), while 
+the shipping percentage line runs roughly the opposite direction, climbing 
+from 13.85% at SP up to a peak of 22.66% at PE. Checked whether order 
+count and revenue actually track each other — they do, ranking identically 
+across all 12 states. The one clear break in the pattern is DF, whose 
+shipping percentage sits lower than states with similar revenue 
+(16.74% vs BA's 19.76%).
+
+Likely because DF, Brazil's capital, has unusually good transport 
+infrastructure even though it isn't an economic hub like SP. This backs 
+up prioritizing ad spend on SP, RJ, and MG, and suggests DF's setup is 
+worth digging into further — there may be something to apply to the 
+mid-table states (GO, ES, BA).
+
+**Supporting evidence** (full queries in Step 8 of Q2.sql):
+- DF's average freight per item (21.07) is genuinely lower than GO 
+  (22.56), ES (22.03), and BA (26.49) — not a rounding coincidence.
+- Order count and revenue rank identically across all 12 states — this 
+  chart reflects both at once, not two separate stories.
+- Side note: CE's average revenue per order (~172) runs almost 40% 
+  higher than SP's (~125), despite far fewer orders — possibly because 
+  distant-state customers bundle more into each order to offset 
+  shipping cost.
+
+  
