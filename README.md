@@ -92,7 +92,7 @@ mid-table states (GO, ES, BA).
 
 ### Chart 3: More orders means more revenue and lower shipping cost — the pattern holds across all 12 states
 
-![Q2-3_3](./Q2-3_3.png)
+![Q2-3](./Q2-3.png)
 
 Every point lines up along a clear diagonal on the log-log scale, 
 confirming that order count and revenue move together almost 1:1 
