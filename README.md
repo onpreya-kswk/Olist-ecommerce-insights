@@ -90,4 +90,22 @@ mid-table states (GO, ES, BA).
   distant-state customers bundle more into each order to offset 
   shipping cost.
 
-  
+### Chart 3: More orders means more revenue and lower shipping cost — the pattern holds across all 12 states
+
+![Q2-3_3](./Q2-3_3.png)
+
+Every point lines up along a clear diagonal on the log-log scale, 
+confirming that order count and revenue move together almost 1:1 
+(matches what Chart 2 showed). SP sits at the top right, the darkest 
+green point — highest orders, highest revenue, lowest shipping cost. 
+CE sits at the bottom left, colored red — lowest on every count.
+
+The color gradient running from top-right to bottom-left lines up with 
+the cause already confirmed in Step 7: distance from the distribution 
+hub. This backs up giving SP top priority, since it wins on all three 
+fronts at once. States like CE and BA should be operations' first 
+focus, since they carry both a small customer base and high shipping 
+cost at the same time.
+
+*No outliers here, so there's nothing extra to dig into like there was 
+for Charts 1 and 2.*
