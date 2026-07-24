@@ -109,3 +109,41 @@ cost at the same time.
 
 *No outliers here, so there's nothing extra to dig into like there was 
 for Charts 1 and 2.*
+
+Q3: Which product category relies most on installment payments?
+
+SQL: Q3.sql
+
+Cleaning the data (Step 1–2 in Q3.sql)
+
+Before writing the real query, checked how trustworthy the payment and product data actually was. Found two things worth flagging:
+
+610 of 32,951 products have no category name — these touch 1,451 orders, just 1.5% of all orders. Small enough to drop; a category labeled "unknown" carries no weight in a bank installment negotiation anyway.
+290 orders were charged on credit_card more than once — split across two cards on the same purchase, each with its own installment plan (e.g. one card at 4 months, one at 6). Checked these weren't accidental duplicate rows first: every one of the 290 has genuinely different installment values attached, confirming they're real parallel transactions.
+
+Payment type nulls and duplicate order_id checks elsewhere came back clean, no issues there.
+
+Based on this, the two decisions baked into the cleaned view (Step 2) are: drop products with no category, and collapse each of those 290 split-payment orders down to one row using MAX(payment_installments) — two cards running in parallel finish when the longer plan finishes, not when both are added together, so MAX reflects the real commitment length and SUM would have overstated it.
+
+Picking which categories to trust (Step 3 in Q3.sql)
+
+Looking at all 70 categories unfiltered, the same problem from Q2 showed up again: categories with very few orders swing wildly. security_and_services had exactly 1 order and an average of 1.0 installments — not a real pattern, just a single data point standing in for an entire category.
+
+Worked through the cutoff the same way as Q2:
+
+Tried n ≥ 30 and checked what it would cost. Only 9 of 70 categories fall below this line — la_cuisine, fashion_sport, music, cds_dvds_musicals, fashion_childrens_clothes, arts_and_craftmanship, home_comfort_2, flowers, and security_and_services — together making up roughly 0.16% of all order-category rows in the analysis.
+Unlike Q2, where reaching a trustworthy sample size meant giving up a real chunk of revenue (8.52% at the 1,000-order cutoff), this trade-off cost next to nothing — the categories getting dropped genuinely have too few orders to say anything about, and dropping them barely moves the dataset.
+
+Landed on n ≥ 30 as the threshold. The final query (Step 5) uses this cutoff and keeps 61 of the 70 categories.
+
+Chart: Average installments by category
+
+(insert chart here — top categories by avg_installment, n ≥ 30)
+
+Among the 61 categories with 30+ orders, average installments range from 7.4 months (computers) down to roughly 2.1 months (electronics) — a gap of more than 5 months between the longest and shortest financing behavior. The categories clustered at the top — computers (7.4), small_appliances_home_oven_and_coffee (6.4), home_appliances_2 (5.5), and office_furniture (5.2, backed by 1,185 orders) — are all big-ticket, long-life purchases. The categories at the bottom — electronics (2.1), home_appliances (2.2), drinks (2.2) — are lower-cost or consumable, so there's little reason to spread the cost.
+
+Marketing and finance teams should prioritize 0%-interest bank deals around computers, office_furniture, home_confort, and furniture_living_room first, since these combine both a long average financing window and enough order volume (particularly office_furniture, at nearly 1,200 orders) that a financing deal protects real revenue rather than a handful of outlier sales.
+
+What's left to check before trusting "category" as the driver
+
+One open question this analysis hasn't ruled out yet: is this really about category, or is it just "expensive items get financed longer" showing up wearing a category label? Step 4 in Q3.sql sets up a query comparing avg_installment against avg_price per category — if the ranking by installment doesn't line up cleanly with the ranking by price, that confirms category carries information beyond just cost. That comparison is queued up as the next step before finalizing this section the way Q2 ruled out weight, price, and seller location as explanations for shipping cost.
