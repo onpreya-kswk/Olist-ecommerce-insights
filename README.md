@@ -66,49 +66,26 @@ Marketing should lean into SP, DF, and RJ first, since they keep more margin per
 
 ![Q2-2](./Q2-2.png)
 
-Revenue bars drop off fast, from SP (~5M) down to CE (under 250K), while 
-the shipping percentage line runs roughly the opposite direction, climbing 
-from 13.85% at SP up to a peak of 22.66% at PE. Checked whether order 
-count and revenue actually track each other — they do, ranking identically 
-across all 12 states. The one clear break in the pattern is DF, whose 
-shipping percentage sits lower than states with similar revenue 
-(16.74% vs BA's 19.76%).
+Revenue bars drop off fast, from SP (~5M) down to CE (under 250K), while the shipping percentage line runs roughly the opposite direction, climbing from 13.85% at SP up to a peak of 22.66% at PE. Checked whether order count and revenue actually track each other — they do, ranking identically across all 12 states. The one clear break in the pattern is DF, whose shipping percentage sits lower than states with similar revenue (16.74% vs BA's 19.76%).
 
-Likely because DF, Brazil's capital, has unusually good transport 
-infrastructure even though it isn't an economic hub like SP. This backs 
-up prioritizing ad spend on SP, RJ, and MG, and suggests DF's setup is 
-worth digging into further — there may be something to apply to the 
-mid-table states (GO, ES, BA).
+Likely because DF, Brazil's capital, has unusually good transport infrastructure even though it isn't an economic hub like SP. This backs up prioritizing ad spend on SP, RJ, and MG, and suggests DF's setup is worth digging into further — there may be something to apply to the mid-table states (GO, ES, BA).
 
 **Supporting evidence** (full queries in Step 8 of Q2.sql):
-- DF's average freight per item (21.07) is genuinely lower than GO 
-  (22.56), ES (22.03), and BA (26.49) — not a rounding coincidence.
-- Order count and revenue rank identically across all 12 states — this 
-  chart reflects both at once, not two separate stories.
-- Side note: CE's average revenue per order (~172) runs almost 40% 
-  higher than SP's (~125), despite far fewer orders — possibly because 
-  distant-state customers bundle more into each order to offset 
-  shipping cost.
+- DF's average freight per item (21.07) is genuinely lower than GO (22.56), ES (22.03), and BA (26.49) — not a rounding coincidence.
+- Order count and revenue rank identically across all 12 states — this chart reflects both at once, not two separate stories.
+- Side note: CE's average revenue per order (~172) runs almost 40% higher than SP's (~125), despite far fewer orders — possibly because distant-state customers bundle more into each order to offset shipping cost.
 
 ### Chart 3: More orders means more revenue and lower shipping cost — the pattern holds across all 12 states
 
 ![Q2-3](./Q2-3.png)
 
-Every point lines up along a clear diagonal on the log-log scale, 
-confirming that order count and revenue move together almost 1:1 
-(matches what Chart 2 showed). SP sits at the top right, the darkest 
-green point — highest orders, highest revenue, lowest shipping cost. 
-CE sits at the bottom left, colored red — lowest on every count.
+Every point lines up along a clear diagonal on the log-log scale, confirming that order count and revenue move together almost 1:1 (matches what Chart 2 showed). SP sits at the top right, the darkest green point — highest orders, highest revenue, lowest shipping cost. CE sits at the bottom left, colored red — lowest on every count.
 
-The color gradient running from top-right to bottom-left lines up with 
-the cause already confirmed in Step 7: distance from the distribution 
-hub. This backs up giving SP top priority, since it wins on all three 
-fronts at once. States like CE and BA should be operations' first 
-focus, since they carry both a small customer base and high shipping 
-cost at the same time.
+The color gradient running from top-right to bottom-left lines up with the cause already confirmed in Step 7: distance from the distribution hub. This backs up giving SP top priority, since it wins on all three fronts at once. States like CE and BA should be operations' first focus, since they carry both a small customer base and high shipping cost at the same time.
 
-*No outliers here, so there's nothing extra to dig into like there was 
-for Charts 1 and 2.*
+*No outliers here, so there's nothing extra to dig into like there was for Charts 1 and 2.*
+
+---
 
 ## Q3: Which product category relies most on installment payments?
 
@@ -136,7 +113,7 @@ Worked through the cutoff the same way as Q2:
 
 Landed on **n ≥ 30** as the threshold. The final query (Step 6) uses this cutoff and keeps 61 of the 70 categories.
 
-### Chart 1: Average installments by category (Top 15)
+### Chart 1: Average installments by category
 
 ![Q3-1](./Q3-1.png)
 
@@ -146,7 +123,7 @@ Ranked the 61 categories with 30+ orders by average installments, then narrowed 
 
 *Shows the top 15 of 61 categories with 30+ orders. The other 46 were left out to keep the chart readable, and a separate 9 categories were dropped earlier for having fewer than 30 orders to trust.*
 
-### Chart 2: Average installment vs average price by category
+### Chart 2: Average installments vs average price by category
 
 ![Q3-2](./Q3-2.png)
 
