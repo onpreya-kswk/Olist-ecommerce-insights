@@ -1,22 +1,23 @@
 # Olist E-Commerce Insights
 
-Digging into Olist's Brazilian e-commerce data to find where marketing spend is safest, how customers pay for expensive items, and what that means for the business.
+# Olist-ecommerce-insights
 
-**Tools:** Python (loading the data), PostgreSQL (all the analysis), Tableau (charts). Python is only used once, at the very start, to move the raw CSV files into the database — every insight after that comes from SQL queries.
+Analysis of Olist E-Commerce using PostgreSQL and Python to optimize marketing, payment strategy, and delivery performance.
 
-## Step 1: Getting the Data In
+## Data Ingestion
 
-Before any analysis can happen, the raw CSV files need to live in a proper database instead of eight separate spreadsheets. This step handles that using a Python script.
+This step moves the raw data from local CSV files into a PostgreSQL database using Python. It sets up a proper relational structure so we can run SQL queries smoothly.
+
+The complete setup logic is handled by the Python script included in this repository.
+
+### Key Details
+
+- **Source to Destination:** Loads raw local CSV files directly into a local PostgreSQL database.
+- **Text Fixing:** Uses `encoding='latin1'` to stop the script from crashing on Portuguese special characters.
+- **Auto Dates:** Uses `parse_dates=True` so Pandas fixes all date text formats into proper timestamps automatically.
+- **RAM Saving:** Pushes data in chunks of 10,000 rows to keep memory usage low and prevent system freezes.
 
 Script: [`data_ingestion.py`](./data_ingestion.py)
-
-What it does:
-* Reads all 8 CSV files and loads each one into its own PostgreSQL table.
-* Uses `encoding='latin1'` — without this, the script crashes on the Portuguese accented characters in the product category names.
-* Loads data in batches of 10,000 rows instead of all at once, so it doesn't eat up all the RAM on a normal laptop.
-* If one file fails to load, the script skips it and keeps going instead of stopping the whole process.
-
-Once this runs, the database is ready and everything else is done in SQL.
 
 ## Q2: Where does shipping cost hurt margins the most?
 
