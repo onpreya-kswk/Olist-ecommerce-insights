@@ -136,7 +136,7 @@ Worked through the cutoff the same way as Q2:
 
 Landed on **n ≥ 30** as the threshold. The final query (Step 6) uses this cutoff and keeps 61 of the 70 categories.
 
-### Chart 1: Average installments by category
+### Chart 1: Average installments by category (Top 15)
 
 ![Q3-1](./Q3-1.png)
 
