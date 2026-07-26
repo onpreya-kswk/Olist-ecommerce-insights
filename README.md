@@ -118,34 +118,54 @@ for Charts 1 and 2.*
 
 Before writing the real query, checked how trustworthy the payment and product data actually was. Found two things worth flagging:
 
-610 of 32,951 products have no category name. These touch 1,451 orders, about 1.5% of all orders — small enough to drop. A category called "unknown" wouldn't help anyone deciding which banks to partner with anyway.
-290 orders got charged on credit_card twice — split across two cards on the same purchase, each with its own installment plan (one card at 4 months, one at 6, for example). Checked these weren't just duplicate rows first: all 290 have genuinely different installment values on each row, so they're real split payments, not an error.
+- **610 of 32,951 products have no category name.** These touch 1,451 orders, about 1.5% of all orders — small enough to drop. A category labeled "unknown" wouldn't help anyone deciding which banks to partner with anyway.
+- **290 orders got charged on credit_card twice** — split across two cards on the same purchase, each with its own installment plan (one card at 4 months, one at 6, for example). Checked these weren't just duplicate rows first: all 290 have genuinely different installment values on each row, so they're real split payments, not an error.
 
 Payment type nulls and duplicate order IDs elsewhere came back clean, no issues there.
 
-Based on this, the cleaned view (Step 2) drops products with no category, and collapses each of those 290 split-payment orders into one row using MAX(payment_installments). Two cards running side by side finish when the longer one finishes, not when you add both together — so MAX gives the real payoff length, and SUM would have overstated it.
+Based on this, the view (Step 3) filters to `credit_card` only and collapses each order down to one row using `MAX(payment_installments)`. Two cards running side by side finish when the longer one finishes, not when you add both together — so MAX gives the real payoff length, and SUM would have overstated it.
 
-### Picking which categories to trust (Step 3 in Q3.sql)
+### Picking which categories to trust (Step 4–5 in Q3.sql)
 
-Looking at all 70 categories unfiltered, the same problem from Q2 showed up again: categories with very few orders swing wildly. security_and_services had exactly 1 order on record, averaging 1.0 installments — not a real pattern, just one data point standing in for a whole category.
+Looking at all 70 categories unfiltered, the same problem from Q2 showed up again: categories with very few orders swing wildly. `security_and_services` had exactly 1 order on record, averaging 1.0 installments — not a real pattern, just one data point standing in for a whole category.
 
 Worked through the cutoff the same way as Q2:
 
-Tried n ≥ 30 and checked what it would cost. Only 9 of 70 categories fall below that line — la_cuisine, fashion_sport, music, cds_dvds_musicals, fashion_childrens_clothes, arts_and_craftmanship, home_comfort_2, flowers, and security_and_services.
-Together those 9 make up only about 0.16% of the order-category rows in this analysis — nowhere near the trade-off Q2 had to make (8.52% of revenue at its 1,000-order cutoff). Here the cutoff barely costs anything.
+- Tried the common rule of n ≥ 30 first — this time it actually held. Only 9 of 70 categories fall below that line: `la_cuisine`, `fashion_sport`, `music`, `cds_dvds_musicals`, `fashion_childrens_clothes`, `arts_and_craftmanship`, `home_comfort_2`, `flowers`, and `security_and_services`.
+- Checked how much of the business gets lost at that cutoff: those 9 categories together make up only about 0.16% of the order-category rows in this analysis — nowhere near the trade-off Q2 had to make (8.52% of revenue at its 1,000-order cutoff).
 
-Landed on n ≥ 30 as the threshold. The final query (Step 5) uses this cutoff and keeps 61 of the 70 categories.
+Landed on **n ≥ 30** as the threshold. The final query (Step 6) uses this cutoff and keeps 61 of the 70 categories.
 
-### Chart: Average installments by category
+### Chart 1: Average installments by category
 
+![Q3-1](./Q3-1.png)
 
+Ranked the 61 categories with 30+ orders by average installments, then narrowed the chart to the top 15 so the labels stay readable and the focus stays on what matters for a financing decision. `computers` leads at **7.4 installments**, followed by `small_appliances_home_oven_and_coffee` (6.4) and `home_appliances_2` (5.5) — all big-ticket electronics. Just behind them, `office_furniture` (5.2), `home_confort` (5.1), and `furniture_living_room` (5.0) form a second cluster of long-lasting furniture. From there down to `small_appliances` (4.3), the rest of the top 15 sit close together, all still well above the 3-month mark.
 
-Among the 61 categories with 30+ orders, average installments run from 7.4 months (computers) down to about 2.1 months (electronics) — over 5 months of spread between the longest and shortest. The top end — computers (7.4), small_appliances_home_oven_and_coffee (6.4), home_appliances_2 (5.5), and office_furniture (5.2, on 1,185 orders) — are all big, long-lasting purchases. The bottom end — electronics (2.1), home_appliances (2.2), drinks (2.2) — are cheaper or used up quickly, so there's not much reason to spread the cost.
+`office_furniture` stands out here — it's the only category in the top 4 backed by real volume (1,185 orders), versus 65–345 orders for the others around it. That makes it the strongest candidate for a bank installment deal: a long financing window *and* enough orders that the deal actually moves revenue, rather than a category propped up by a handful of purchases.
 
-Bank installment deals should be prioritized for computers, office_furniture, home_confort, and furniture_living_room first — these categories have both a long financing window and enough orders behind them (especially office_furniture, at almost 1,200 orders) that a deal protects real revenue instead of a handful of one-off sales.
+*Shows the top 15 of 61 categories with 30+ orders. The other 46 were left out to keep the chart readable, and a separate 9 categories were dropped earlier for having fewer than 30 orders to trust.*
 
-Shows only categories with 30+ orders. The rest were dropped — too few orders to say anything reliable about them.
+### Chart 2: Average installment vs average price by category
 
-Still to check before trusting "category" as the real driver (Step 4 in Q3.sql)
+![Q3-2](./Q3-2.png)
 
-One thing this hasn't ruled out yet: is this really about category, or just "pricier stuff gets financed longer" wearing a category label? Step 4 sets up a query comparing average installments against average price per category — if the two rankings don't line up closely, that's evidence category matters on its own, not just price. Still needs to be run and checked, the same way Q2 ruled out weight, price, and seller location before settling on distance as the real cause of high shipping cost.
+Each point is one category, plotted by average price against average installments, colored by order count (darker = more orders behind the number). Price and installments mostly move together — the darkest, highest-volume points (`bed_bath_table`, `computers_accessories`, `health_beauty`) sit in a fairly tight band, and `computers` itself, off in the top right, has both the highest price ($1,115.67) and the highest installments (7.42) of any category. So a chunk of this pattern really is just "expensive stuff gets financed longer."
+
+But three labeled points sit off that trend enough to matter:
+
+- `office_furniture` reaches 5.2 installments at a price ($166.22) roughly a third of what similarly-financed categories cost — and it's one of the darker points on the chart, so this isn't a small sample throwing off the average.
+- `diapers_and_hygiene` sits higher than its $40.67 price would suggest, out-financing categories that cost nearly double.
+- `fixed_telephony` breaks the pattern the other way — a comparatively high price ($225.84) paired with noticeably fewer installments (3.12) than other categories at that price level.
+
+Full check queries are in Step 7 of Q3.sql. Price explains part of the story, but categories like `office_furniture` and `diapers_and_hygiene` clearly get financed longer than their price alone would predict — category carries real signal on its own, not just a stand-in for price.
+
+### Chart 3: Order volume vs average installments by category
+
+![Q3-3](./Q3-3.png)
+
+Each point is one category, plotted by order count (log scale) against average installments, colored by average price. Plotting order count this way checks that the ranking in Chart 1 isn't being driven by categories that barely scraped past the n ≥ 30 cutoff. It isn't — `bed_bath_table` (8,929 orders) sits far right with a solid 4.4 installments, and `office_furniture` (1,185 orders) holds its position near the top of the chart at 5.2, both backed by real volume rather than a handful of lucky small samples. The categories with the shortest installment averages near the bottom are also backed by decent order counts, so the low end of the ranking is just as trustworthy as the high end.
+
+The color adds one more check on top of that: points near the top of the chart (highest installments) tend to run darker (higher average price), matching what Chart 2 already showed — but a few lighter-colored points still reach the upper-middle of the chart, categories getting financed longer than their price alone would suggest, the same exceptions flagged in Chart 2.
+
+*No further outliers to dig into here — order volume backs up what Chart 1 and Chart 2 already showed.*
