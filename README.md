@@ -4,20 +4,17 @@
 
 Analysis of Olist E-Commerce using PostgreSQL and Python to optimize marketing, payment strategy, and delivery performance.
 
-## Data Ingestion
+## Setting up the database (Step 0 in ingestion.sql)
 
-This step moves the raw data from local CSV files into a PostgreSQL database using Python. It sets up a proper relational structure so we can run SQL queries smoothly.
+The table schema is created with SQL alone — [ingestion.sql](./ingestion.sql) types every column explicitly (text, bigint, double precision, timestamp) for all 8 raw Olist tables. Loading the actual CSV data into those tables is a manual step done through DBeaver, not part of the script.
 
-The complete setup logic is handled by the Python script included in this repository.
+A few things worth noting about this step:
 
-### Key Details
+- **Why loading is manual:** Postgres runs inside Docker in this setup, so server-side `COPY` can't reach CSV files sitting on the local Windows machine — it only sees paths inside the container. `\copy` isn't an option either, since that's a `psql` command-line feature and this all runs through DBeaver. The workaround: for each of the 8 tables, right-click it in DBeaver's Database Navigator → **Import Data** → source format **CSV** → pick the matching file → set **Encoding** to `LATIN1` on the extraction settings page → Proceed. DBeaver reads the file locally and streams it over the same connection, sidestepping the container's filesystem entirely.
+- **Re-runnable by design:** drops `View_Q2`, `View_Q3`, and `View_Q4` before dropping the tables underneath them — Postgres otherwise blocks a table drop while a view still depends on it, so this order lets the schema be rebuilt from scratch without erroring out. 
+- **Category translation table stays as-is:** `product_category_translation` is created with `product_category_name` and `product_category_name_english` as column names directly, matching what Q3.sql expects for its join onto `products` — no renaming step needed downstream.
 
-- **Source to Destination:** Loads raw local CSV files directly into a local PostgreSQL database.
-- **Text Fixing:** Uses `encoding='latin1'` to stop the script from crashing on Portuguese special characters.
-- **Auto Dates:** Uses `parse_dates=True` so Pandas fixes all date text formats into proper timestamps automatically.
-- **RAM Saving:** Pushes data in chunks of 10,000 rows to keep memory usage low and prevent system freezes.
-
-Script: [`data_ingestion.py`](./data_ingestion.py)
+Script: [`ingestion.sql`](./ingestion.sql)
 
 ## Q2: Where does shipping cost hurt margins the most?
 
