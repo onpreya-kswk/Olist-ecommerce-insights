@@ -4,7 +4,7 @@ Analysis of Olist E-Commerce using PostgreSQL and Python to optimize marketing, 
 
 ## Setting up the database (Step 0 in ingestion.sql)
 
-The table schema is created with SQL alone — [ingestion.sql](./ingestion.sql) types every column explicitly (text, bigint, double precision, timestamp) for all 8 raw Olist tables. Loading the actual CSV data into those tables is a manual step done through DBeaver, not part of the script.
+The table schema is created with SQL alone every column explicitly (text, bigint, double precision, timestamp) for all 8 raw Olist tables. Loading the actual CSV data into those tables is a manual step done through DBeaver, not part of the script.
 
 A few things worth noting about this step:
 
