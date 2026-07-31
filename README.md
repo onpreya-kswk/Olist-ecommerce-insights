@@ -189,3 +189,13 @@ Digging into `PE`, `CE`, and `SP` directly (full query in Step 8 of Q4.sql) show
 `score_drop` nets out each state's own on-time baseline, which varies for reasons beyond delay alone — that's why it doesn't rank PE/CE at the top the way Q2's shipping-cost figures might predict. But looking at delayed orders on their own, the pattern from Q2 holds: **states farther from the distribution hub don't just pay more to ship — when something goes wrong, it takes longer to fix, and customers punish that longer wait with a lower score.**
 
 *Shows only states with 1,000+ orders (CE included separately above despite falling just under the cutoff, since it's directly relevant to the Q2 comparison).*
+
+### Chart 2: Delay severity vs satisfaction when delayed, by state
+
+![Q4-2](./Q4-2.png)
+
+Each point is one state, plotted by how many days late an order runs (when it does run late) against the average review score on those delayed orders, colored by order volume (darker = more orders behind the number). The pattern is clear: `SP` sits top-left with the shortest average delay (6.3 days) and the highest score when delayed (2.89), while `CE` and `RJ` sit bottom-right with the longest delays (14.4 and 12.1 days) and the lowest scores (2.20 and 2.13).
+
+This is the clearest evidence yet that Q2's distance-from-hub finding still matters in Q4 — just one step removed from `score_drop`. States farther from SP's distribution hub don't just pay more to ship (Q2); when something does go wrong, it takes longer to resolve, and customers punish that longer wait with a lower score. `CE` makes the case especially well here: even though it fell just under Step 7's 1,000-order threshold and doesn't appear in Chart 1, its position here — worst delay severity, near-worst satisfaction — is exactly what Q2's shipping-cost finding would predict.
+
+*Shows the 11 states from Chart 1 plus CE, included here despite its 984 orders since it's directly relevant to the Q2 distance comparison.*
