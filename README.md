@@ -214,7 +214,7 @@ One nuance worth flagging: `BA` has the single highest delay rate of all 11 stat
 
 *Shows the 11 states from Chart 1. CE, present in Chart 2 for its relevance to the Q2 comparison, is excluded here since this chart is specifically validating Chart 1's ranking, which CE was never part of.*
 
---
+---
 
 ### Summary
 
