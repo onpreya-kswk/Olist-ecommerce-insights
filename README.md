@@ -14,6 +14,8 @@ A few things worth noting about this step:
 
 Script: [`ingestion.sql`](./ingestion.sql)
 
+---
+
 ## Q2: Where does shipping cost hurt margins the most?
 
 **SQL:** [Q2.sql](./Q2.sql)
