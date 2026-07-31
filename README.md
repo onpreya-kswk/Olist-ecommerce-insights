@@ -194,8 +194,12 @@ Digging into `PE`, `CE`, and `SP` directly (full query in Step 8 of Q4.sql) show
 
 ![Q4-2](./Q4-2.png)
 
-Each point is one state, plotted by how many days late an order runs (when it does run late) against the average review score on those delayed orders, colored by order volume (darker = more orders behind the number). The pattern is clear: `SP` sits top-left with the shortest average delay (6.3 days) and the highest score when delayed (2.89), while `CE` and `RJ` sit bottom-right with the longest delays (14.4 and 12.1 days) and the lowest scores (2.20 and 2.13).
+### Chart 2: Delay severity vs satisfaction when delayed, by state
 
-This is the clearest evidence yet that Q2's distance-from-hub finding still matters in Q4 — just one step removed from `score_drop`. States farther from SP's distribution hub don't just pay more to ship (Q2); when something does go wrong, it takes longer to resolve, and customers punish that longer wait with a lower score. `CE` makes the case especially well here: even though it fell just under Step 7's 1,000-order threshold and doesn't appear in Chart 1, its position here — worst delay severity, near-worst satisfaction — is exactly what Q2's shipping-cost finding would predict.
+![Q4-2](./Q4-2.png)
+
+Each point is one state, plotted by how many days late an order runs (when it does run late) against the average review score on those delayed orders, colored by order volume. The broad pattern holds: the three longest-delay states — `CE` (14.4 days), `RJ` (12.2 days), and `PE` (10.6 days) — sit at the bottom on score (2.20, 2.13, 2.20), while `SP`, among the shortest delays (6.3 days), sits at the top (2.89).
+
+It's not a clean straight line, though, and two states are worth calling out: `DF` has the shortest average delay of the whole group (6.1 days, even shorter than SP's) but a middling score (2.46) — well below what that short delay would predict. And `BA` (10.3 days) scores higher (2.58) than `GO` (9.7 days, 2.45) despite running a longer delay. So delay length is a real driver of dissatisfaction — confirming the distance → longer delay → lower score chain from Q2 — but it isn't the only one; something else pulls DF's score down and lifts BA's on top of that effect.
 
 *Shows the 11 states from Chart 1 plus CE, included here despite its 984 orders since it's directly relevant to the Q2 distance comparison.*
