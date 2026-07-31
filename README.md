@@ -213,3 +213,11 @@ Each point is one state, plotted by total order volume (log scale) against score
 One nuance worth flagging: `BA` has the single highest delay rate of all 11 states (13.5%, edging out RJ) but a middling score_drop (1.55) — nowhere near the top. A high delay *rate* doesn't automatically translate to a high score *drop*; Chart 2 already showed that how long a delay runs matters as much as how often one happens, and BA's case reinforces that a high frequency of delays alone doesn't guarantee severe damage to the score.
 
 *Shows the 11 states from Chart 1. CE, present in Chart 2 for its relevance to the Q2 comparison, is excluded here since this chart is specifically validating Chart 1's ranking, which CE was never part of.*
+
+--
+
+### Summary
+
+Delivery delay clearly hurts satisfaction — every state loses at least 1.4 stars on delayed orders (Chart 1) — and Q2's distance-from-hub finding still shows up here, just one layer removed from the raw shipping-cost numbers. States farther from SP's distribution hub tend to run longer delays when something does go wrong, and that longer wait is what drives the score down further (Chart 2), not distance or shipping cost directly. Order volume backs this up rather than explaining it away: the states hit hardest (RJ, PE) have enough orders behind them to trust the numbers, and a high rate of delays alone (BA) doesn't guarantee a high score drop the way delay *length* does (Chart 3).
+
+For the business: closing the review-score gap isn't primarily a shipping-cost problem — it's a delivery-time-recovery problem. The fix that would move the needle most isn't necessarily cheaper shipping to CE, PE, and RJ, but faster resolution once an order is already running late in those states, since it's the length of the delay, not just the fact of one, that customers punish hardest.
