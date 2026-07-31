@@ -194,10 +194,6 @@ Digging into `PE`, `CE`, and `SP` directly (full query in Step 8 of Q4.sql) show
 
 ![Q4-2](./Q4-2.png)
 
-### Chart 2: Delay severity vs satisfaction when delayed, by state
-
-![Q4-2](./Q4-2.png)
-
 Each point is one state, plotted by how many days late an order runs (when it does run late) against the average review score on those delayed orders, colored by order volume. The broad pattern holds: the three longest-delay states — `CE` (14.4 days), `RJ` (12.2 days), and `PE` (10.6 days) — sit at the bottom on score (2.20, 2.13, 2.20), while `SP`, among the shortest delays (6.3 days), sits at the top (2.89).
 
 It's not a clean straight line, though, and two states are worth calling out: `DF` has the shortest average delay of the whole group (6.1 days, even shorter than SP's) but a middling score (2.46) — well below what that short delay would predict. And `BA` (10.3 days) scores higher (2.58) than `GO` (9.7 days, 2.45) despite running a longer delay. So delay length is a real driver of dissatisfaction — confirming the distance → longer delay → lower score chain from Q2 — but it isn't the only one; something else pulls DF's score down and lifts BA's on top of that effect.
