@@ -203,3 +203,13 @@ Each point is one state, plotted by how many days late an order runs (when it do
 It's not a clean straight line, though, and two states are worth calling out: `DF` has the shortest average delay of the whole group (6.1 days, even shorter than SP's) but a middling score (2.46) — well below what that short delay would predict. And `BA` (10.3 days) scores higher (2.58) than `GO` (9.7 days, 2.45) despite running a longer delay. So delay length is a real driver of dissatisfaction — confirming the distance → longer delay → lower score chain from Q2 — but it isn't the only one; something else pulls DF's score down and lifts BA's on top of that effect.
 
 *Shows the 11 states from Chart 1 plus CE, included here despite its 984 orders since it's directly relevant to the Q2 distance comparison.*
+
+### Chart 3: Order volume vs score drop by state
+
+![Q4-3](./Q4-3.png)
+
+Each point is one state, plotted by total order volume (log scale) against score_drop, colored by what share of orders in that state ran late. This checks that Chart 1's ranking isn't being driven by states with too little data to trust — it isn't. `RJ` (score_drop 2.12) sits near the top of both the volume axis (9,576 orders) and the color scale (13.4% of orders delayed), and `PE` (2.09) shows a similarly high delay rate (10.4%) despite a smaller order base (1,229) — both have real weight behind their numbers, not a handful of lucky small samples. `SP`, at the opposite end, combines the highest volume (31,536 orders) with one of the lowest delay rates (5.8%) and the lowest score_drop (1.44), consistent with everything Q2 and Chart 1 already showed about it.
+
+One nuance worth flagging: `BA` has the single highest delay rate of all 11 states (13.5%, edging out RJ) but a middling score_drop (1.55) — nowhere near the top. A high delay *rate* doesn't automatically translate to a high score *drop*; Chart 2 already showed that how long a delay runs matters as much as how often one happens, and BA's case reinforces that a high frequency of delays alone doesn't guarantee severe damage to the score.
+
+*Shows the 11 states from Chart 1. CE, present in Chart 2 for its relevance to the Q2 comparison, is excluded here since this chart is specifically validating Chart 1's ranking, which CE was never part of.*
