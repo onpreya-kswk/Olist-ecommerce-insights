@@ -156,7 +156,7 @@ The color adds one more check on top of that: points near the top of the chart (
 Before writing the real query, checked how trustworthy the orders and reviews data actually was. Found two things worth flagging:
 
 - **2,971 of 99,441 orders never got a real delivery outcome** — canceled or still shipping, with no delivery date to measure delay against. Excluded, same reasoning as Q2.
-- **340 orders have more than one review row on the same order.** Checking how far apart those scores were: 223 (~66%) were exact duplicates (no distortion at all), 53 (~16%) differed by 1 point (still a fair average), and 64 (~19%) disagreed by 2+ points — e.g. a 1-star and a 5-star on the same order, which averages out to a "3" nobody actually gave. Those 64 (57 once overlapped with the delivery-date filter) were dropped entirely; at 0.08% of the analysis set, the cost is negligible next to the distortion they'd otherwise cause.
+- **340 orders have more than one review row on the same order.** Checking how far apart those scores were: 223 (~66%) were exact duplicates (no distortion at all), 53 (~16%) differed by 1 point (still a fair average), and 64 (~19%) disagreed by 2+ points — e.g. a 1-star and a 5-star on the same order, which averages out to a "3" nobody actually gave. Those 64 were dropped entirely from the pool of orders eligible for analysis. Once combined with the delivered/date filters, this removed 57 orders from the final 75,355 → 75,298 (7 of the 64 had already been excluded by those other conditions). At 0.08% of the analysis set, the cost is negligible next to the distortion they'd otherwise cause.
 
 Delivered orders with no review at all were also excluded (21,115 orders) — there's nothing to analyze satisfaction against without a score.
 
