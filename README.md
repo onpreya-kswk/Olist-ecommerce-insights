@@ -142,3 +142,48 @@ Each point is one category, plotted by order count (log scale) against average i
 The color adds one more check on top of that: points near the top of the chart (highest installments) tend to run darker (higher average price), matching what Chart 2 already showed — but a few lighter-colored points still reach the upper-middle of the chart, categories getting financed longer than their price alone would suggest, the same exceptions flagged in Chart 2.
 
 *No further outliers to dig into here — order volume backs up what Chart 1 and Chart 2 already showed.*
+
+---
+
+## Q4: Does delivery delay hurt review scores, and does it hit some states harder than others?
+
+**SQL:** [Q4.sql](./Q4.sql)
+
+### Cleaning the data (Step 1–2 in Q4.sql)
+
+Before writing the real query, checked how trustworthy the orders and reviews data actually was. Found two things worth flagging:
+
+- **2,971 of 99,441 orders never got a real delivery outcome** — canceled or still shipping, with no delivery date to measure delay against. Excluded, same reasoning as Q2.
+- **340 orders have more than one review row on the same order.** Checking how far apart those scores were: 223 (~66%) were exact duplicates (no distortion at all), 53 (~16%) differed by 1 point (still a fair average), and 64 (~19%) disagreed by 2+ points — e.g. a 1-star and a 5-star on the same order, which averages out to a "3" nobody actually gave. Those 64 (57 once overlapped with the delivery-date filter) were dropped entirely; at 0.08% of the analysis set, the cost is negligible next to the distortion they'd otherwise cause.
+
+Delivered orders with no review at all were also excluded (21,115 orders) — there's nothing to analyze satisfaction against without a score.
+
+Based on this, the view collapses duplicate reviews with `AVG()` (unlike Q3's `MAX()` — installments are one commitment length, review scores are separate opinions, so averaging is the fairer summary), skipping any order where those opinions contradict each other by 2+ points. Final clean set: 75,298 orders.
+
+### Picking which states to trust (Step 5–6 in Q4.sql)
+
+Looking at all 27 states unfiltered, the same problem from Q2 and Q3 showed up again: small states swing wildly. Worked through the cutoff the same way:
+
+- Tried n ≥ 30 first — didn't cut anything, same as Q2. Too loose for this dataset.
+- Reused Q2's 1,000-order threshold and checked the cost: excludes 7.87% of orders, close to Q2's 8.52% — confirms 1,000 is a reasonable bar here too, not just borrowed blindly.
+
+Landed on **1,000 orders**. The final query keeps 11 of the 27 states.
+
+### Chart 1: Review score drop by state (on-time vs delayed)
+
+![Q4-1](./Q4-1.png)
+
+Among the 11 states with 1,000+ orders, a late delivery costs anywhere from **1.44 stars (SP)** to **2.12 stars (RJ)** off the average review score, with `PE` close behind at 2.09. Notably, `CE` — one of Q2's two highest-shipping-cost states, alongside PE — doesn't appear here at all: it has only 984 orders in this cleaned dataset, just under the 1,000-order bar (checked directly).
+
+Every state loses at least 1.4 stars when an order runs late — delay clearly damages satisfaction everywhere, not just in a handful of places. But the *ranking* here doesn't cleanly match Q2's shipping-cost ranking: RJ, not flagged as high-shipping-cost in Q2, tops this list, while PE (which was flagged) sits just behind it.
+
+### Why doesn't the ranking match Q2 — and does distance still matter?
+
+Digging into `PE`, `CE`, and `SP` directly (full query in Step 8 of Q4.sql) shows the connection to Q2 is still there, just one layer deeper than `score_drop` shows:
+
+- When a delay happens, `CE` orders run **14.4 days late** on average and `PE` orders run **10.6 days late** — more than double `SP`'s **6.3 days**.
+- Longer delays hit harder: `CE` and `PE`'s average score *when delayed* is **2.20**, noticeably below `SP`'s **2.89**.
+
+`score_drop` nets out each state's own on-time baseline, which varies for reasons beyond delay alone — that's why it doesn't rank PE/CE at the top the way Q2's shipping-cost figures might predict. But looking at delayed orders on their own, the pattern from Q2 holds: **states farther from the distribution hub don't just pay more to ship — when something goes wrong, it takes longer to fix, and customers punish that longer wait with a lower score.**
+
+*Shows only states with 1,000+ orders (CE included separately above despite falling just under the cutoff, since it's directly relevant to the Q2 comparison).*
